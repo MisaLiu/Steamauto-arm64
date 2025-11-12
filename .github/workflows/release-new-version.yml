@@ -65,7 +65,7 @@ jobs:
     needs: prepare
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest]
+        os: [windows-latest, ubuntu-latest, ubuntu-22.04-arm]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -136,6 +136,12 @@ jobs:
           name: binaries-ubuntu-latest
           path: artifacts/linux
 
+      - name: Download Linux (arm64) binary
+        uses: actions/download-artifact@v4
+        with:
+          name: binaries-ubuntu-22.04-arm
+          path: artifacts/linux-arm
+
       - name: Prepare release files
         run: |
           mkdir -p release_files
@@ -146,6 +152,10 @@ jobs:
           
           if [ -n "$(ls -A artifacts/linux/* 2>/dev/null)" ]; then
             cp -r artifacts/linux/* release_files/
+          fi
+          
+          if [ -n "$(ls -A artifacts/linux-arm/* 2>/dev/null)" ]; then
+            cp -r artifacts/linux-arm/* release_files/
           fi
           
           tree release_files

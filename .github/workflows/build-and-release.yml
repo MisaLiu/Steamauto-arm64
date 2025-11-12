@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest]
+        os: [windows-latest, ubuntu-latest, ubuntu-22.04-arm]
 
     steps:
       - uses: actions/checkout@v4
@@ -74,6 +74,7 @@ jobs:
           mkdir releases
           mv Steamauto/windows-latest-dist/* releases/
           mv Steamauto/ubuntu-latest-dist/* releases/
+          mv Steamauto/ubuntu-22.04-arm-dist/* releases/
 
       - name: Upload to Github Releases
         uses: ncipollo/release-action@main
