@@ -4,12 +4,11 @@ import json
 import random
 import string
 import time
-import base64
 import uuid
 
 import requests
 
-from utils.ApiCrypt import UUApiCrypt
+from uuyoupinapi.UUApiCrypt import UUApiCrypt
 from utils.logger import PluginLogger
 from uuyoupinapi import models
 
@@ -137,7 +136,8 @@ class UUAccount:
             proxies=proxies,
         ).json()
 
-    def get_uu_uk(self, headers={}, proxies=None):
+    @staticmethod
+    def get_uu_uk(headers={}, proxies=None):
         api_crypt = UUApiCrypt(generate_random_string(16))
         data = {"iud": str(uuid.uuid4())}
         resp = requests.post(
@@ -198,7 +198,7 @@ class UUAccount:
                     else:
                         logger.debug("UK缓存已过期或时间戳无效，尝试获取悠悠校验参数...")
 
-                    fetched_uk = self.get_uu_uk()
+                    fetched_uk = UUAccount.get_uu_uk()
                     if fetched_uk:
                         self.uk = fetched_uk
                         self.uk_time = time.time()
